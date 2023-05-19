@@ -13,17 +13,14 @@ This repository holds the code and data of ProteinChat: Towards Enabling ChatGPT
 - In this work, we make an initial attempt towards enabling ChatGPT-like capabilities on protein 3D structures, by developing a prototype system ProteinChat.
 - ProteinChat works in a similar way as ChatGPT. Users upload a protein 3D structure and ask various questions about this protein. ProteinChat will answer these questions in a multi-turn, interactive manner. 
 - The ProteinChat system consists of a protein 3D structure encoder, a large language model (LLM), and an adaptor. The protein encoder  takes a protein 3D structure as input and learns a representation for this protein. The adaptor transforms the protein representation produced by the protein encoder  into another  representation that is acceptable to the  LLM. The LLM takes the representation transformed by the adaptor and users' questions about this protein as inputs and generates answers. All these components are trained end-to-end.
-- To train ProteinChat, we collected   instruction tuning datasets which contain 10,834 proteins and x instructions.
+- To train ProteinChat, we collected   instruction tuning datasets which contain 163,635 proteins and x instructions.
 
 
-![overview](figs/DrugChat.png)
+![overview](figs/proteinchat_overview.png)
 
 ## Datasets
 
-The file `data/ChEMBL_QA.json` and `data/PubChem_QA.json` contains data for the ChEMBL Drug Instruction Tuning Dataset and the PubChem Drug Instruction Tuning Dataset. The data structure is as follows. 
-
-{SMILES String: [ [Question1 , Answer1], [Question2 , Answer2]... ] }
-
+We utilize Protein Data Bank [(RCSB PDB)](https://www.rcsb.org/) to get the both the protein 3D structures and description texts. More details can be found [here](data/README.md)
 
 ## Getting Started
 ### Installation
@@ -97,6 +94,7 @@ Now we launch the `demo.py` in our original environment. Make sure you have run 
 + [MiniGPT-4](https://minigpt-4.github.io/) 
 + [Lavis](https://github.com/salesforce/LAVIS)
 + [Vicuna](https://github.com/lm-sys/FastChat)
++ [ESM-IF1](https://github.com/facebookresearch/esm/tree/main/examples/inverse_folding)
 
 
 

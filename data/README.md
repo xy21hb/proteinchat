@@ -6,13 +6,13 @@ The three-dimensional structures of proteins were collected from the Research Co
 
 ### Protein Description Text
 
-In Protein Data Bank, most proteins has a primary publication linked with a PubMed ID. We collected the corresponding abstract for the 163,635 proteins that contain such PubMed IDs. The file `data/annotation.json` lists the abstract texts. 
+In Protein Data Bank, most proteins has a primary publication linked with a PubMed ID. We collected the corresponding abstract for the 167,036 proteins that contain such PubMed IDs. The file `data/abstract.json` lists the abstract texts. 
 Each entry has the following format:
 
 ```json
 {"pdb_id": "XXXX", "caption": "abstract of the primary publication of this protein"}
 ```
 
-### Encoded Protein
+### Encode the Protein
 
-We use GVP-GNN and GVP-Transformer from [ESM-IF1](examples/inverse_folding) to encode PDB files to PyTorch tensors. 
+We use GVP-GNN and GVP-Transformer from [ESM-IF1](https://github.com/facebookresearch/esm/tree/main/examples/inverse_folding) to encode PDB files to PyTorch tensors. 
