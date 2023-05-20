@@ -13,7 +13,7 @@ This repository holds the code and data of ProteinChat: Towards Enabling ChatGPT
 - In this work, we make an initial attempt towards enabling ChatGPT-like capabilities on protein 3D structures, by developing a prototype system ProteinChat.
 - ProteinChat works in a similar way as ChatGPT. Users upload a protein 3D structure and ask various questions about this protein. ProteinChat will answer these questions in a multi-turn, interactive manner. 
 - The ProteinChat system consists of a protein 3D structure encoder (based on [ESM inverse folding](https://github.com/facebookresearch/esm/tree/main/examples/inverse_folding)), a large language model (LLM), and an adaptor. The protein encoder  takes a protein 3D structure as input and learns a representation for this protein. The adaptor transforms the protein representation produced by the protein encoder  into another  representation that is acceptable to the  LLM. The LLM takes the representation transformed by the adaptor and users' questions about this protein as inputs and generates answers. All these components are trained end-to-end.
-- To train ProteinChat, we collected   instruction tuning datasets which contain 163,635 proteins and x instructions.
+- To train ProteinChat, we collected   instruction tuning datasets which contain 143508 proteins and 143508 instructions.
 
 
 ![overview](figs/proteinchat_overview.png)
