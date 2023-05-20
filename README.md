@@ -34,6 +34,7 @@ Git clone our repository, creating a python environment and ativate it via the f
 git clone https://github.com/UCSD-AI4H/drugchat
 cd drugchat
 conda env create -f environment.yml
+pip install einops
 conda activate drugchat
 ```
 
