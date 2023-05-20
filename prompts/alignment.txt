@@ -1,1 +1,5 @@
-<protein><proteinHere></protein> Describe this protein in a short paragraph.
+<protein><proteinHere></protein> Describe this protein.
+<protein><proteinHere></protein> Tell me about this protein in detail.
+<protein><proteinHere></protein> Please provide a detailed description of the protein.
+<protein><proteinHere></protein> Could you describe this protein for me?
+<protein><proteinHere></protein> Please give me an introduction about this protein.

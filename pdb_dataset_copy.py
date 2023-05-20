@@ -24,68 +24,15 @@ class ESMDataset(Dataset):
     def __len__(self):
         return len(self.annotation)
 
-    # def __getitem__(self, index):
-    #     start = time.time()
-    #
-    #     ann = self.annotation[index]
-    #
-    #     coords = '{}.npy'.format(ann["pdb_id"])
-    #
-    #     coords_path = os.path.join(self.pdb_root, coords)
-    #     end_get_path = time.time()
-    #     print(f"[pdb_dataset_copy]Elapsed time end_get_path: {end_get_path - start}")
-    #     coords = np.load(coords_path)
-    #     end_load_coords = time.time()
-    #     print(f"[pdb_dataset_copy]Elapsed time end_load_coords: {end_load_coords - end_get_path}")
-    #     _, encoder_out = self.protein_encoder.sample(coords, temperature=1)
-    #
-    #     end_encoder_sample = time.time()
-    #     print(f"[pdb_dataset_copy]Elapsed time end_encoder_sample: {end_encoder_sample - end_load_coords}")
-    #
-    #     caption = ann["caption"]
-    #
-    #     return {
-    #         "pdb_coords": coords,
-    #         "text_input": caption,
-    #         "encoder_out": encoder_out["encoder_out"][0],
-    #         "pdb_id": ann["pdb_id"]
-    #     }
-
-    # def collater(self, samples):
-    #     max_len_protein_dim0 = -1
-    #     for pdb_json in samples:
-    #         pdb_coords = pdb_json["pdb_coords"]
-    #         shape_dim0 = pdb_coords.shape[0]
-    #         max_len_protein_dim0 = max(max_len_protein_dim0, shape_dim0)
-    #         # print(f"max_len_protein_dim0: {max_len_protein_dim0}")
-    #     for pdb_json in samples:
-    #         pdb_coords = pdb_json["pdb_coords"]
-    #         shape_dim0 = pdb_coords.shape[0]
-    #         pad1 = ((0, max_len_protein_dim0 - shape_dim0), (0, 0), (0, 0))
-    #         arr1_padded = np.pad(pdb_coords, pad1, mode='constant', )
-    #         pdb_json["pdb_coords"] = arr1_padded
-    #     return default_collate(samples)
-
     def __getitem__(self, index):
-        start = time.time()
 
         ann = self.annotation[index]
 
         protein_embedding = '{}.pt'.format(ann["pdb_id"])
 
         protein_embedding_path = os.path.join(self.pdb_root, protein_embedding)
-        end_get_path = time.time()
-        # print(f"[pdb_dataset_copy]Elapsed time end_get_path: {end_get_path - start}")
-        # this might cause cuda reinit issue
         protein_embedding = torch.load(protein_embedding_path, map_location=torch.device('cpu'))
         protein_embedding.requires_grad = False
-        end_load_coords = time.time()
-        # print(f"[pdb_dataset_copy]Elapsed time end_load_coords: {end_load_coords - end_get_path}")
-        # _, encoder_out = self.protein_encoder.sample(coords, temperature=1)
-
-        end_encoder_sample = time.time()
-        # print(f"[pdb_dataset_copy]Elapsed time end_encoder_sample: {end_encoder_sample - end_load_coords}")
-
         caption = ann["caption"]
 
         return {
@@ -101,12 +48,15 @@ class ESMDataset(Dataset):
             pdb_embeddings = pdb_json["encoder_out"]
             shape_dim0 = pdb_embeddings.shape[0]
             max_len_protein_dim0 = max(max_len_protein_dim0, shape_dim0)
-            # print(f"max_len_protein_dim0: {max_len_protein_dim0}")
         for pdb_json in samples:
             pdb_embeddings = pdb_json["encoder_out"]
             shape_dim0 = pdb_embeddings.shape[0]
             pad1 = ((0, max_len_protein_dim0 - shape_dim0), (0, 0), (0, 0))
             arr1_padded = np.pad(pdb_embeddings, pad1, mode='constant', )
             pdb_json["pdb_coords"] = arr1_padded
+
+        # print(samples)
+        print(samples[0]["encoder_out"].shape)
+        print(samples[1]["encoder_out"].shape)
         return default_collate(samples)
 
