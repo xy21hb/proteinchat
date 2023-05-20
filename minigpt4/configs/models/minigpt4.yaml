@@ -13,7 +13,7 @@ model:
   num_query_token: 32
 
   # Vicuna
-  llama_model: "/PATH/TO/VICUNA/WEIGHT"
+  llama_model: "/home/h5guo/data/vicuna_weights_13b"
 
   # generation configs
   prompt: ""
