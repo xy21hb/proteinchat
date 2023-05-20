@@ -22,7 +22,7 @@ This repository holds the code and data of ProteinChat: Towards Enabling ChatGPT
 
 The dataset contains 143508 proteins (represented using 3D structures) with 143508 instructions. 
 The instruction set are available at [this link](https://drive.google.com/file/d/1iMgPyiIzpvXdKiNsXnRKn2YpmP92Xyub/view?usp=share_link).
-The link to processed protein files (80G in total) will be available on May 20. 
+The processed protein files (83G in total) are available at [this link](https://drive.google.com/file/d/1AeJW5BY5C-d8mKJjAULTax6WA4hzWS0N/view?usp=share_link). 
 The data is curated from the [Protein Data Bank](https://www.rcsb.org/). More details can be found [here](data/README.md).
 
 ## Getting Started

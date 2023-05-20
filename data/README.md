@@ -15,5 +15,5 @@ Each entry has the following format:
 
 ### Encode the Protein
 
-We use GVP-GNN and GVP-Transformer from [ESM-IF1](https://github.com/facebookresearch/esm/tree/main/examples/inverse_folding) to encode chain A of each protein to PyTorch tensors. The folder `sample_pt` lists the `pt` files for the proteins we sampled. We will put the full version on Google Drive soon.
+We use GVP-GNN and GVP-Transformer from [ESM-IF1](https://github.com/facebookresearch/esm/tree/main/examples/inverse_folding) to encode chain A of each protein to PyTorch tensors. The folder `sample_pt` lists the `pt` files for the proteins we sampled. The full version after compression (83G) is on [Google Drive](https://drive.google.com/file/d/1AeJW5BY5C-d8mKJjAULTax6WA4hzWS0N/view?usp=share_link).
  
