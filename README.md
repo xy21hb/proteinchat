@@ -65,7 +65,7 @@ Then, set the path to the vicuna weight in the model config file
 ### Training
 **You need roughly 45 GB GPU memory for the training.** 
 
-The training configuration file is [train_configs/minigpt4_stage2_esm.yaml](train_configs/minigpt4_stage2_esm.yaml). Change the [here](train_configs/minigpt4_stage2_esm.yaml#L10) with a pretrained MiniGPT-4 weight. A MiniGPT-4 checkpoint with only stage one training can be downloaded 
+The training configuration file is [train_configs/minigpt4_stage2_esm.yaml](train_configs/minigpt4_stage2_esm.yaml). Change [here](train_configs/minigpt4_stage2_esm.yaml#L10) with the path to pretrained MiniGPT-4 weight. A MiniGPT-4 checkpoint with only stage one training can be downloaded 
 [here](https://drive.google.com/file/d/1u9FRRBB3VovP1HxCAlpD9Lw4t4P6-Yq8/view?usp=share_link). In addition, you may want to change the number of epochs and other hyper-parameters there, such as `max_epoch`, `init_lr`, `min_lr`,`warmup_steps`, `batch_size_train`. Please adjust `iters_per_epoch` so that `iters_per_epoch` * `batch_size_train` = your training set size. Due to the GPU consumption, we set `batch_size_train=1`. 
 
 Start training on LLaMA model with protein dataset by running [finetune.sh](finetune.sh) `bash finetune.sh`. 
