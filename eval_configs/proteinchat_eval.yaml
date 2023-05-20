@@ -8,7 +8,18 @@ model:
   low_resource: True
   prompt_path: "prompts/alignment.txt"
   prompt_template: '###Human: {} ###Assistant: '
-  ckpt: '/DIR/TO/MODEL'
+  ckpt: '/PATH/TO/FINETUNE/MODEL'
+
+datasets:
+  cc_sbu_align:
+    vis_processor:
+      train:
+        name: "blip2_image_eval"
+        image_size: 224
+    text_processor:
+      train:
+        name: "blip_caption"
 
 run:
   task: image_text_pretrain
+
