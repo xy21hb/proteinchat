@@ -44,19 +44,25 @@ class ESMDataset(Dataset):
 
     def collater(self, samples):
         max_len_protein_dim0 = -1
+        # updated_samples = []
         for pdb_json in samples:
             pdb_embeddings = pdb_json["encoder_out"]
             shape_dim0 = pdb_embeddings.shape[0]
             max_len_protein_dim0 = max(max_len_protein_dim0, shape_dim0)
         for pdb_json in samples:
+            # new_pdb = {}
             pdb_embeddings = pdb_json["encoder_out"]
             shape_dim0 = pdb_embeddings.shape[0]
             pad1 = ((0, max_len_protein_dim0 - shape_dim0), (0, 0), (0, 0))
             arr1_padded = np.pad(pdb_embeddings, pad1, mode='constant', )
-            pdb_json["pdb_coords"] = arr1_padded
+            # new_pdb["text_input"] = pdb_json["text_input"]
+            # new_pdb["chain"] = pdb_json["chain"]
+            # new_pdb["pdb_id"] = pdb_json["pdb_id"]
+            # new_pdb["encoder_out"] = pdb_json["text_input"]
+            pdb_json["encoder_out"] = arr1_padded
 
         # print(samples)
-        print(samples[0]["encoder_out"].shape)
-        print(samples[1]["encoder_out"].shape)
+        # print(samples[0]["encoder_out"].shape)
+        # print(samples[1]["encoder_out"].shape)
         return default_collate(samples)
 
