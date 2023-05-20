@@ -34,10 +34,10 @@ These instructions largely follow those in MiniGPT-4.
 Git clone our repository, creating a python environment and ativate it via the following command
 
 ```bash
-git clone https://github.com/UCSD-AI4H/drugchat
-cd drugchat
+git clone https://github.com/UCSD-AI4H/proteinchat
+cd proteinchat
 conda env create -f environment.yml
-conda activate drugchat
+conda activate proteinchat
 pip install einops
 ```
 
@@ -65,15 +65,13 @@ Then, set the path to the vicuna weight in the model config file
 ### Training
 **You need roughly 40 GB GPU memory for the training.** 
 
-The training configuration file is [train_configs/drugchat_stage2_finetune.yaml](train_configs/drugchat_stage2_finetune.yaml). You may want to change the number of epochs and other hyper-parameters there, such as `max_epoch`, `init_lr`, `min_lr`,`warmup_steps`, `batch_size_train`. You need to adjust `iters_per_epoch` so that `iters_per_epoch` * `batch_size_train` = your training set size.
+The training configuration file is [train_configs/minigpt4_stage2_esm.yaml](train_configs/minigpt4_stage2_esm.yaml). You may want to change the number of epochs and other hyper-parameters there, such as `max_epoch`, `init_lr`, `min_lr`,`warmup_steps`, `batch_size_train`. You need to adjust `iters_per_epoch` so that `iters_per_epoch` * `batch_size_train` = your training set size.
 
 Start training on LLaMA model with protein dataset by running `bash finetune.sh`. 
 
-### Inference by Launching Demo Locally
-
 **It takes around 24 GB GPU memory for the demo.**
 
-Find the checkpoint you save in the training process above, which is located under the folder `minigpt4/output/minigpt4_stage2_esm/` by default. Copy it to the folder `ckpt` by running `cp pipeline/output/pipeline_stage2_finetune/the_remaining_path ckpt/with_gnn_node_feat.pth`. 
+Find the checkpoint you save in the training process above, which is located under the folder `minigpt4/output/minigpt4_stage2_esm/` by default. Copy it to the folder `ckpt` by running `cp minigpt4/output/minigpt4_stage2_esm/.../checkpoint_xxx.pth`. 
 
 Now we launch the `demo.py` in our original environment. Then, start the demo [demo.sh](demo.sh) on your local machine by running `bash demo.sh`. Then, open the URL created by the demo and try it out!
 
