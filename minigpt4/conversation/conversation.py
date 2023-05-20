@@ -9,7 +9,7 @@ from transformers import StoppingCriteria, StoppingCriteriaList
 import dataclasses
 from enum import auto, Enum
 from typing import List, Tuple, Any
-from einops import rearrange, reduce, repeat
+
 from minigpt4.common.registry import registry
 
 
@@ -107,8 +107,8 @@ class StoppingCriteriaSub(StoppingCriteria):
 
 
 CONV_VISION = Conversation(
-    system="Give the following protein: <protein>proteinContent</protein>. "
-           "Please answer my questions.",
+    system="Give the following image: <Img>ImageContent</Img>. "
+           "You will be able to see the image once I provide it to you. Please answer my questions.",
     roles=("Human", "Assistant"),
     messages=[],
     offset=2,
@@ -129,7 +129,7 @@ class Chat:
 
     def ask(self, text, conv):
         if len(conv.messages) > 0 and conv.messages[-1][0] == conv.roles[0] \
-                and conv.messages[-1][1][-6:] == '</protein>':  # last message is image.
+                and conv.messages[-1][1][-6:] == '</Img>':  # last message is image.
             conv.messages[-1][1] = ' '.join([conv.messages[-1][1], text])
         else:
             conv.append_message(conv.roles[0], text)
@@ -146,15 +146,13 @@ class Chat:
         begin_idx = max(0, current_max_len - max_length)
 
         embs = embs[:, begin_idx:]
-        torch.set_printoptions(profile="full")
-        print(embs[0][400][:200])
 
         outputs = self.model.llama_model.generate(
             inputs_embeds=embs,
             max_new_tokens=max_new_tokens,
             stopping_criteria=self.stopping_criteria,
             num_beams=num_beams,
-            do_sample=False,
+            do_sample=True,
             min_length=min_length,
             top_p=top_p,
             repetition_penalty=repetition_penalty,
@@ -166,46 +164,35 @@ class Chat:
             output_token = output_token[1:]
         if output_token[0] == 1:  # some users find that there is a start token <s> at the beginning. remove it
             output_token = output_token[1:]
-
-        print(output_token)
         output_text = self.model.llama_tokenizer.decode(output_token, add_special_tokens=False)
         output_text = output_text.split('###')[0]  # remove the stop sign '###'
         output_text = output_text.split('Assistant:')[-1].strip()
         conv.messages[-1][1] = output_text
         return output_text, output_token.cpu().numpy()
 
-    # def upload_img(self, image, conv, img_list):
-    #     if isinstance(image, str):  # is a image path
-    #         raw_image = Image.open(image).convert('RGB')
-    #         image = self.vis_processor(raw_image).unsqueeze(0).to(self.device)
-    #     elif isinstance(image, Image.Image):
-    #         raw_image = image
-    #         image = self.vis_processor(raw_image).unsqueeze(0).to(self.device)
-    #     elif isinstance(image, torch.Tensor):
-    #         if len(image.shape) == 3:
-    #             image = image.unsqueeze(0)
-    #         image = image.to(self.device)
-    #
-    #     image_emb, _ = self.model.encode_protein(image)
-    #     img_list.append(image_emb)
-    #     conv.append_message(conv.roles[0], "<Img><ImageHere></Img>")
-    #     msg = "Received."
-    #     # self.conv.append_message(self.conv.roles[1], msg)
-    #     return msg
+    def upload_img(self, image, conv, img_list):
+        if isinstance(image, str):  # is a image path
+            raw_image = Image.open(image).convert('RGB')
+            image = self.vis_processor(raw_image).unsqueeze(0).to(self.device)
+        elif isinstance(image, Image.Image):
+            raw_image = image
+            image = self.vis_processor(raw_image).unsqueeze(0).to(self.device)
+        elif isinstance(image, torch.Tensor):
+            if len(image.shape) == 3:
+                image = image.unsqueeze(0)
+            image = image.to(self.device)
 
-    def upload_protein(self, image, conv, protein_list):
-        protein_emb, _ = self.model.encode_protein(image)
-        protein_emb = rearrange(protein_emb, 't b c -> b t c')
-        protein_list.append(protein_emb)
-        conv.append_message(conv.roles[0], "<protein><proteinHere></protein>")
+        image_emb, _ = self.model.encode_protein(image)
+        img_list.append(image_emb)
+        conv.append_message(conv.roles[0], "<Img><ImageHere></Img>")
         msg = "Received."
         # self.conv.append_message(self.conv.roles[1], msg)
         return msg
 
     def get_context_emb(self, conv, img_list):
         prompt = conv.get_prompt()
-        prompt_segs = prompt.split('<proteinHere>')
-        assert len(prompt_segs) == len(img_list) + 1, "Unmatched numbers of protein placeholders and proteins."
+        prompt_segs = prompt.split('<ImageHere>')
+        assert len(prompt_segs) == len(img_list) + 1, "Unmatched numbers of image placeholders and images."
         seg_tokens = [
             self.model.llama_tokenizer(
                 seg, return_tensors="pt", add_special_tokens=i == 0).to(self.device).input_ids
@@ -214,8 +201,6 @@ class Chat:
         ]
         seg_embs = [self.model.llama_model.model.embed_tokens(seg_t) for seg_t in seg_tokens]
         mixed_embs = [emb for pair in zip(seg_embs[:-1], img_list) for emb in pair] + [seg_embs[-1]]
-        for emb in mixed_embs:
-            print(emb.shape)
         mixed_embs = torch.cat(mixed_embs, dim=1)
         return mixed_embs
 

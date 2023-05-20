@@ -27,8 +27,8 @@ class Registry:
 
         Usage:
 
-            from pipeline.common.registry import registry
-            from pipeline.datasets.base_dataset_builder import BaseDatasetBuilder
+            from minigpt4.common.registry import registry
+            from minigpt4.datasets.base_dataset_builder import BaseDatasetBuilder
         """
 
         def wrap(builder_cls):
@@ -59,7 +59,7 @@ class Registry:
 
         Usage:
 
-            from pipeline.common.registry import registry
+            from minigpt4.common.registry import registry
         """
 
         def wrap(task_cls):
@@ -88,7 +88,7 @@ class Registry:
 
         Usage:
 
-            from pipeline.common.registry import registry
+            from minigpt4.common.registry import registry
         """
 
         def wrap(model_cls):
@@ -117,7 +117,7 @@ class Registry:
 
         Usage:
 
-            from pipeline.common.registry import registry
+            from minigpt4.common.registry import registry
         """
 
         def wrap(processor_cls):
@@ -146,7 +146,7 @@ class Registry:
 
         Usage:
 
-            from pipeline.common.registry import registry
+            from minigpt4.common.registry import registry
         """
 
         def wrap(lr_sched_cls):
@@ -170,7 +170,7 @@ class Registry:
 
         Usage:
 
-            from pipeline.common.registry import registry
+            from minigpt4.common.registry import registry
         """
 
         def wrap(runner_cls):
@@ -194,7 +194,7 @@ class Registry:
 
         Usage:
 
-            from pipeline.common.registry import registry
+            from minigpt4.common.registry import registry
         """
         assert isinstance(path, str), "All path must be str."
         if name in cls.mapping["paths"]:
@@ -210,7 +210,7 @@ class Registry:
 
         Usage::
 
-            from pipeline.common.registry import registry
+            from minigpt4.common.registry import registry
 
             registry.register("config", {})
         """
