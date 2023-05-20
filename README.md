@@ -72,7 +72,7 @@ Start training on LLaMA model with protein dataset by running [finetune.sh](fine
 
 **It takes around 24 GB GPU memory for the demo.**
 
-Find the checkpoint you save in the training process above, which is located under the folder `minigpt4/output/minigpt4_stage2_esm/` by default. Copy it to the folder `ckpt` by running `cp minigpt4/output/minigpt4_stage2_esm/.../checkpoint_xxx.pth`. 
+Find the checkpoint you save in the training process above, which is located under the folder `minigpt4/output/minigpt4_stage2_esm/` by default. Copy it to the folder `ckpt` by running `cp minigpt4/output/minigpt4_stage2_esm/.../checkpoint_xxx.pth`, and modify the `ckpt` entry in [eval_configs/proteinchat_eval.yaml](eval_configs/proteinchat_eval.yaml) to the location of your checkpoint.
 
 Now we launch the `demo.py` in our original environment. Then, start the demo [demo.sh](demo.sh) on your local machine by running `bash demo.sh`. Then, open the URL created by the demo and try it out!
 
