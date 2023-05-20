@@ -1,0 +1,5 @@
+datasets:
+  pdb:
+    data_type: protein
+    build_info:
+      storage: /home/h5guo/work/esm-minigpt4/pdb/
