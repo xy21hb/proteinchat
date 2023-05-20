@@ -62,7 +62,9 @@ model_config.device_8bit = args.gpu_id
 model_cls = registry.get_model_class(model_config.arch)
 model = model_cls.from_config(model_config).to('cuda:{}'.format(args.gpu_id))
 
-chat = Chat(model, device='cuda:{}'.format(args.gpu_id))
+vis_processor_cfg = cfg.datasets_cfg.cc_sbu_align.vis_processor.train
+vis_processor = registry.get_processor_class(vis_processor_cfg.name).from_config(vis_processor_cfg)
+chat = Chat(model, vis_processor, device='cuda:{}'.format(args.gpu_id))
 print('Initialization Finished')
 
 # ========================================
@@ -76,14 +78,22 @@ def gradio_reset(chat_state, img_list):
         img_list = []
     return None, gr.update(value=None, interactive=True), gr.update(placeholder='Please upload your protein first', interactive=False), gr.update(value="Upload & Start Chat", interactive=True), chat_state, img_list
 
-def upload_protein(gr_img, text_input, chat_state):
+def upload_img(gr_img, text_input, chat_state):
     if gr_img is None:
         return None, None, gr.update(interactive=True), chat_state, None
     chat_state = CONV_VISION.copy()
     img_list = []
+
     if gr_img.name[-3:] == ".pt":
         protein_embedding = torch.load(gr_img.name, map_location=torch.device('cpu'))
         sample_protein = protein_embedding.to('cuda:{}'.format(args.gpu_id))
+    # elif gr_img.name[-3:] == "pdb":
+    #     coords, native_seq = esm.inverse_folding.util.load_coords(gr_img.name, "A")
+    #     model, alphabet = esm.pretrained.esm_if1_gvp4_t16_142M_UR50()
+    #     model = model.eval().to('cuda:{}'.format(args.gpu_id))
+    #     sampled_seq, encoder_out = model.sample(coords, temperature=1,
+    #                                             device=torch.device('cuda:{}'.format(args.gpu_id)))
+    #     sample_protein = encoder_out["encoder_out"][0].to('cuda:{}'.format(args.gpu_id))
     else:
         raise gr.Error("Input file must be either .pdb or .pt !")
 
@@ -113,6 +123,8 @@ def gradio_answer(chatbot, chat_state, img_list, num_beams, temperature):
 
 title = """<h1 align="center">Demo of ProteinChat</h1>"""
 description = """<h3>This is the demo of ProteinChat. Upload your protein and start chatting!</h3>"""
+# article = """<p><a href='https://minigpt-4.github.io'><img src='https://img.shields.io/badge/Project-Page-Green'></a></p><p><a href='https://github.com/Vision-CAIR/MiniGPT-4'><img src='https://img.shields.io/badge/Github-Code-blue'></a></p><p><a href='https://raw.githubusercontent.com/Vision-CAIR/MiniGPT-4/main/MiniGPT_4.pdf'><img src='https://img.shields.io/badge/Paper-PDF-red'></a></p>
+# """
 
 #TODO show examples below
 
@@ -152,7 +164,7 @@ with gr.Blocks() as demo:
             chatbot = gr.Chatbot(label='ProteinChat')
             text_input = gr.Textbox(label='User', placeholder='Please upload your protein first', interactive=False)
     
-    upload_button.click(upload_protein, [image, text_input, chat_state], [image, text_input, upload_button, chat_state, img_list])
+    upload_button.click(upload_img, [image, text_input, chat_state], [image, text_input, upload_button, chat_state, img_list])
     
     text_input.submit(gradio_ask, [text_input, chatbot, chat_state], [text_input, chatbot, chat_state]).then(
         gradio_answer, [chatbot, chat_state, img_list, num_beams, temperature], [chatbot, chat_state, img_list]
