@@ -20,7 +20,10 @@ This repository holds the code and data of ProteinChat: Towards Enabling ChatGPT
 
 ## Datasets
 
-We utilize Protein Data Bank [(RCSB PDB)](https://www.rcsb.org/) to get the both the protein 3D structures and description texts. More details can be found [here](data/README.md)
+The dataset contains 143508 proteins (represented using 3D structures) with 143508 instructions. 
+The instruction set are available at [this link](https://drive.google.com/file/d/1AqaAXw-O4g1WhR4JPlJFAISVmeo1DJpS/view?usp=share_link).
+The link to processed protein files (80G in total) will be available on May 20. 
+The data is curated from the Protein Data Bank [(RCSB PDB)](https://www.rcsb.org/). More details can be found [here](data/README.md)
 
 ## Getting Started
 ### Installation
