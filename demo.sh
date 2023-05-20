@@ -1,0 +1,1 @@
+python demo_esm.py --cfg-path eval_configs/proteinchat_eval.yaml  --gpu-id 1

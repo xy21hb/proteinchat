@@ -1,0 +1,1 @@
+torchrun train_esm.py --cfg-path train_configs/minigpt4_stage2_esm.yaml
