@@ -1,0 +1,1 @@
+<protein><proteinHere></protein> Describe this protein in a short paragraph.

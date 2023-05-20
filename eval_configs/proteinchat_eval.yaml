@@ -1,0 +1,14 @@
+model:
+  arch: mini_gpt4
+  model_type: pretrain_vicuna
+  freeze_vit: True
+  freeze_qformer: True
+  max_txt_len: 160
+  end_sym: "###"
+  low_resource: True
+  prompt_path: "prompts/alignment.txt"
+  prompt_template: '###Human: {} ###Assistant: '
+  ckpt: '/DIR/TO/MODEL'
+
+run:
+  task: image_text_pretrain
