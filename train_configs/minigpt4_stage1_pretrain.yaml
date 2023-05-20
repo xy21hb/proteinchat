@@ -43,7 +43,7 @@ run:
   iters_per_epoch: 5000
 
   seed: 42
-  output_dir: "output/proteinchat_stage1_pretrain"
+  output_dir: "output/minigpt4_stage1_pretrain"
 
   amp: True
   resume_ckpt_path: null

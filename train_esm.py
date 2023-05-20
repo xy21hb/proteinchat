@@ -6,6 +6,7 @@
 """
 
 import argparse
+import os
 import random
 
 import numpy as np
@@ -14,23 +15,29 @@ import torch.backends.cudnn as cudnn
 
 # import esm
 import minigpt4.tasks as tasks
-from minigpt4.common.config import Config
+from minigpt4.esm.esm_config import Config
 from minigpt4.common.dist_utils import get_rank, init_distributed_mode
 from minigpt4.common.logger import setup_logger
+from minigpt4.common.optims import (
+    LinearWarmupCosineLRScheduler,
+    LinearWarmupStepLRScheduler,
+)
 from minigpt4.common.registry import registry
 from minigpt4.common.utils import now
 
 # imports modules for registration
-# from pipeline.datasets.builders import *
-from minigpt4.datasets.pdb_dataset import ESMDataset
+from minigpt4.datasets.builders import *
+from pdb_dataset_copy import ESMDataset
+from minigpt4.models import *
+from minigpt4.processors import *
+from minigpt4.runners import *
+from minigpt4.tasks import *
 
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Training")
 
     parser.add_argument("--cfg-path", required=True, help="path to configuration file.")
-    parser.add_argument("--pdb-path", default="/home/h5guo/data/esm_subset/pt", help="path to protein embedding file.")
-    parser.add_argument("--ann-path", default="/home/h5guo/data/esm_subset/ann.json", help="path to annotation file.")
     parser.add_argument(
         "--options",
         nargs="+",
@@ -72,29 +79,47 @@ def main():
 
     # set before init_distributed_mode() to ensure the same job_id shared across all ranks.
     job_id = now()
-    args = parse_args()
-    cfg = Config(args)
+    print("1*******************")
+    cfg = Config(parse_args())
+    print("2*******************")
     init_distributed_mode(cfg.run_cfg)
+    print("3*******************")
+
     setup_seeds(cfg)
+    print("4*******************")
     # set after init_distributed_mode() to only log on master.
     setup_logger()
+    print("5*******************")
     cfg.pretty_print()
+    print("6*******************")
     task = tasks.setup_task(cfg)
+    print("7*******************")
 
+    # protein_encoder, alphabet = esm.pretrained.esm_if1_gvp4_t16_142M_UR50()
+    # protein_encoder = protein_encoder.eval()
+    # freeze_protein_encoder = True
+    # if freeze_protein_encoder:
+    #     for name, param in protein_encoder.named_parameters():
+    #         param.requires_grad = False
     print('Loading protein_encoder Done')
 
-    datasets_raw = ESMDataset(pdb_root=args.pdb_path,
-                              ann_paths=args.ann_path,
+    datasets_raw = ESMDataset(pdb_root="/home/h5guo/data/esm_subset/pt",
+                              ann_paths="/home/h5guo/data/esm_subset/ann.json",
                               chain="A")
+    # print(datasets_raw.__getitem__(0)["pdb_coords"].shape)
+    # exit()
     datasets = {'esm': {'train': datasets_raw}}
 
 
+    print("8*******************")
     model = task.build_model(cfg)
 
+    print("9*******************")
 
     runner = get_runner_class(cfg)(
         cfg=cfg, job_id=job_id, task=task, model=model, datasets=datasets
     )
+    print("10*******************")
     runner.train()
 
 
