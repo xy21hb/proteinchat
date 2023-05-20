@@ -6,7 +6,7 @@ This repository holds the code and data of ProteinChat: Towards Enabling ChatGPT
 
 ## Examples
 
-![demo1](figs/examples/demo.png) 
+![Eg1](fig/example-protein.png) 
 
 
 ## Introduction
