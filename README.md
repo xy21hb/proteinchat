@@ -16,7 +16,7 @@ This repository holds the code and data of ProteinChat: Towards Enabling ChatGPT
 - To train ProteinChat, we collected   instruction tuning datasets which contain 143508 proteins and 143508 instructions.
 
 
-![overview](figs/proteinchat_overview.png)
+![overview](fig/proteinchat_overview.png)
 
 ## Datasets
 
