@@ -41,7 +41,7 @@ conda activate proteinchat
 pip install einops
 ```
 
-Verify the installation of `torch` and `torchvision` is successful by running `python -c "import torchvision; print(torchvision.__version__)"`. If it outputs the version number without any warnings or errors, then you can go to the next step (installing PyTorch Geometric). __If it outputs any warnings or errors__, try to uninstall `torch` by `conda uninstall pytorch torchvision torchaudio cudatoolkit` and then reinstall them following [here](https://pytorch.org/get-started/previous-versions/#v1121). You need to find the correct command according to the CUDA version your GPU driver supports (check `nvidia-smi`). 
+Verify the installation of `torch` and `torchvision` is successful by running `python -c "import torchvision; print(torchvision.__version__)"`. If it outputs the version number without any warnings or errors, then you are good to go. __If it outputs any warnings or errors__, try to uninstall `torch` by `conda uninstall pytorch torchvision torchaudio cudatoolkit` and then reinstall them following [here](https://pytorch.org/get-started/previous-versions/#v1121). You need to find the correct command according to the CUDA version your GPU driver supports (check `nvidia-smi`). 
 
 **2. Prepare the pretrained Vicuna weights**
 
@@ -63,11 +63,11 @@ Then, set the path to the vicuna weight in the model config file
 [here](minigpt4/configs/models/minigpt4.yaml#L16) at Line 16.
 
 ### Training
-**You need roughly 40 GB GPU memory for the training.** 
+**You need roughly 45 GB GPU memory for the training.** 
 
-The training configuration file is [train_configs/minigpt4_stage2_esm.yaml](train_configs/minigpt4_stage2_esm.yaml). You may want to change the number of epochs and other hyper-parameters there, such as `max_epoch`, `init_lr`, `min_lr`,`warmup_steps`, `batch_size_train`. You need to adjust `iters_per_epoch` so that `iters_per_epoch` * `batch_size_train` = your training set size.
+The training configuration file is [train_configs/minigpt4_stage2_esm.yaml](train_configs/minigpt4_stage2_esm.yaml). You may want to change the number of epochs and other hyper-parameters there, such as `max_epoch`, `init_lr`, `min_lr`,`warmup_steps`, `batch_size_train`. Please adjust `iters_per_epoch` so that `iters_per_epoch` * `batch_size_train` = your training set size. Due to the GPU consumption, we set `batch_size_train=1`. 
 
-Start training on LLaMA model with protein dataset by running `bash finetune.sh`. 
+Start training on LLaMA model with protein dataset by running [finetune.sh](finetune.sh) `bash finetune.sh`. 
 
 **It takes around 24 GB GPU memory for the demo.**
 
