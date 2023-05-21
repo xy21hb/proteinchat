@@ -27,7 +27,7 @@ from minigpt4.common.utils import now
 
 # imports modules for registration
 from minigpt4.datasets.builders import *
-from pdb_dataset_copy import ESMDataset
+from minigpt4.datasets.pdb_dataset import ESMDataset
 from minigpt4.models import *
 from minigpt4.processors import *
 from minigpt4.runners import *
@@ -88,8 +88,8 @@ def main():
     task = tasks.setup_task(cfg)
 
 
-    datasets_raw = ESMDataset(pdb_root="data/esm_subset/pt",
-                              ann_paths="data/esm_subset/ann.json",
+    datasets_raw = ESMDataset(pdb_root="/home/h5guo/work/proteinchat/data/esm_1w/pt_1w",
+                              ann_paths="/home/h5guo/work/proteinchat/data/esm_1w/ann_1w.json",
                               chain="A")
     datasets = {'esm': {'train': datasets_raw}}
     model = task.build_model(cfg)
