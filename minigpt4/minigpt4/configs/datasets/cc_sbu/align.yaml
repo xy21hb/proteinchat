@@ -1,5 +1,0 @@
-datasets:
-  cc_sbu_align:
-    data_type: images
-    build_info:
-      storage: /home/h5guo/work/esm-minigpt4/cc_sbu_align/

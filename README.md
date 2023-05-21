@@ -6,7 +6,7 @@ This repository holds the code and data of ProteinChat: Towards Enabling ChatGPT
 
 ## Examples
 
-![demo1](figs/examples/demo.png) 
+![Eg1](fig/protein-eg.png) 
 
 
 ## Introduction
@@ -21,9 +21,9 @@ This repository holds the code and data of ProteinChat: Towards Enabling ChatGPT
 ## Datasets
 
 The dataset contains 143508 proteins (represented using 3D structures) with 143508 instructions. 
-The instruction set are available at [this link](https://drive.google.com/file/d/1AqaAXw-O4g1WhR4JPlJFAISVmeo1DJpS/view?usp=share_link).
-The link to processed protein files (80G in total) will be available on May 20. 
-The data is curated from the [Protein Data Bank](https://www.rcsb.org/). More details can be found [here](data/README.md)
+The instruction set are available at [this link](https://drive.google.com/file/d/1iMgPyiIzpvXdKiNsXnRKn2YpmP92Xyub/view?usp=share_link).
+The processed protein files (83G in total) are available at [this link](https://drive.google.com/file/d/1AeJW5BY5C-d8mKJjAULTax6WA4hzWS0N/view?usp=share_link). 
+The data is curated from the [Protein Data Bank](https://www.rcsb.org/). More details can be found [here](data/README.md).
 
 ## Getting Started
 ### Installation
@@ -41,11 +41,11 @@ conda activate proteinchat
 pip install einops
 ```
 
-Verify the installation of `torch` and `torchvision` is successful by running `python -c "import torchvision; print(torchvision.__version__)"`. If it outputs the version number without any warnings or errors, then you can go to the next step (installing PyTorch Geometric). __If it outputs any warnings or errors__, try to uninstall `torch` by `conda uninstall pytorch torchvision torchaudio cudatoolkit` and then reinstall them following [here](https://pytorch.org/get-started/previous-versions/#v1121). You need to find the correct command according to the CUDA version your GPU driver supports (check `nvidia-smi`). 
+Verify the installation of `torch` and `torchvision` is successful by running `python -c "import torchvision; print(torchvision.__version__)"`. If it outputs the version number without any warnings or errors, then you are good to go. __If it outputs any warnings or errors__, try to uninstall `torch` by `conda uninstall pytorch torchvision torchaudio cudatoolkit` and then reinstall them following [here](https://pytorch.org/get-started/previous-versions/#v1121). You need to find the correct command according to the CUDA version your GPU driver supports (check `nvidia-smi`). 
 
 **2. Prepare the pretrained Vicuna weights**
 
-The current version of DrugChat is built on the v0 versoin of Vicuna-13B.
+The current version of ProteinChat is built on the v0 versoin of Vicuna-13B.
 Please refer to our instruction [here](PrepareVicuna.md) 
 to prepare the Vicuna weights.
 The final weights would be in a single folder in a structure similar to the following:
@@ -63,15 +63,15 @@ Then, set the path to the vicuna weight in the model config file
 [here](minigpt4/configs/models/minigpt4.yaml#L16) at Line 16.
 
 ### Training
-**You need roughly 40 GB GPU memory for the training.** 
+**You need roughly 45 GB GPU memory for the training.** 
 
-The training configuration file is [train_configs/minigpt4_stage2_esm.yaml](train_configs/minigpt4_stage2_esm.yaml). You may want to change the number of epochs and other hyper-parameters there, such as `max_epoch`, `init_lr`, `min_lr`,`warmup_steps`, `batch_size_train`. You need to adjust `iters_per_epoch` so that `iters_per_epoch` * `batch_size_train` = your training set size.
+The training configuration file is [train_configs/minigpt4_stage2_esm.yaml](train_configs/minigpt4_stage2_esm.yaml). In addition, you may want to change the number of epochs and other hyper-parameters there, such as `max_epoch`, `init_lr`, `min_lr`,`warmup_steps`, `batch_size_train`. Please adjust `iters_per_epoch` so that `iters_per_epoch` * `batch_size_train` = your training set size. Due to the GPU consumption, we set `batch_size_train=1`. 
 
-Start training on LLaMA model with protein dataset by running `bash finetune.sh`. 
+Start training on LLaMA model with protein dataset by running [finetune.sh](finetune.sh) `bash finetune.sh`. 
 
 **It takes around 24 GB GPU memory for the demo.**
 
-Find the checkpoint you save in the training process above, which is located under the folder `minigpt4/output/minigpt4_stage2_esm/` by default. Copy it to the folder `ckpt` by running `cp minigpt4/output/minigpt4_stage2_esm/.../checkpoint_xxx.pth`. 
+Find the checkpoint you save in the training process above, which is located under the folder `minigpt4/output/minigpt4_stage2_esm/` by default. Copy it to the folder `ckpt` by running `cp minigpt4/output/minigpt4_stage2_esm/.../checkpoint_xxx.pth`, and modify the `ckpt` entry in [eval_configs/proteinchat_eval.yaml](eval_configs/proteinchat_eval.yaml) to the location of your checkpoint.
 
 Now we launch the `demo.py` in our original environment. Then, start the demo [demo.sh](demo.sh) on your local machine by running `bash demo.sh`. Then, open the URL created by the demo and try it out!
 
