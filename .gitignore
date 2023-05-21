@@ -1,1 +1,3 @@
 /minigpt4/output/
+/train_configs/minigpt4_stage2_esm.yaml
+/minigpt4/configs/models/minigpt4.yaml

@@ -146,8 +146,6 @@ class Chat:
         begin_idx = max(0, current_max_len - max_length)
 
         embs = embs[:, begin_idx:]
-        torch.set_printoptions(profile="full")
-        print(embs[0][400][:200])
 
         outputs = self.model.llama_model.generate(
             inputs_embeds=embs,
@@ -173,25 +171,6 @@ class Chat:
         output_text = output_text.split('Assistant:')[-1].strip()
         conv.messages[-1][1] = output_text
         return output_text, output_token.cpu().numpy()
-
-    # def upload_img(self, image, conv, img_list):
-    #     if isinstance(image, str):  # is a image path
-    #         raw_image = Image.open(image).convert('RGB')
-    #         image = self.vis_processor(raw_image).unsqueeze(0).to(self.device)
-    #     elif isinstance(image, Image.Image):
-    #         raw_image = image
-    #         image = self.vis_processor(raw_image).unsqueeze(0).to(self.device)
-    #     elif isinstance(image, torch.Tensor):
-    #         if len(image.shape) == 3:
-    #             image = image.unsqueeze(0)
-    #         image = image.to(self.device)
-    #
-    #     image_emb, _ = self.model.encode_protein(image)
-    #     img_list.append(image_emb)
-    #     conv.append_message(conv.roles[0], "<Img><ImageHere></Img>")
-    #     msg = "Received."
-    #     # self.conv.append_message(self.conv.roles[1], msg)
-    #     return msg
 
     def upload_protein(self, image, conv, protein_list):
         protein_emb, _ = self.model.encode_protein(image)
