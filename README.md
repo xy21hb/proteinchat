@@ -2,7 +2,7 @@
 
 This repository holds the code and data of ProteinChat: Towards Enabling ChatGPT-Like Capabilities on Protein 3D Structures.
 
-## Technical report will be available soon.
+## Technical report is available [here](ProteinChat.pdf)
 
 ## Examples
 
